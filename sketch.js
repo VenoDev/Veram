@@ -17,4 +17,6 @@ function draw() { //Called every frame
     vertex(-100, 0, 0);
     vertex(100, 0, 0);
     endShape();
+    rotateX(frameCount * 0.01);
+    rotateZ(frameCount * 0.01);
 }
