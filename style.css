@@ -1,0 +1,31 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+canvas {
+  display: block;
+}
+
+div[id="toolbar"] {
+  width: 200px;
+  height: 20px;
+  margin: 5px;
+  display: inline-block;
+  align-self: stretch;
+  position: fixed;
+  left: 0px;
+  background-color: rgba(0, 0, 0, 0.562);
+  border-radius: 5px;
+  color: #000000;
+  padding: 0px;
+  font-size: 18px;
+}
+
+p[id="logo"] {
+  margin: 5px;
+  height: 10px;
+  font-size: 10px;
+  font-family: Arial;
+  color: white;
+}
