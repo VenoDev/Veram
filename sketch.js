@@ -11,6 +11,10 @@ function setup() { //Called on the start of the program
 }
 
 function draw() { //Called every frame
-    vertex(-100, 0, 0)
-    vertex(100, 0, 0)
+    strokeWeight(3);
+    stroke(237, 34, 93);
+    beginShape(LINES);
+    vertex(-100, 0, 0);
+    vertex(100, 0, 0);
+    endShape();
 }
