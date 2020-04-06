@@ -77,9 +77,7 @@ function draw() { //Called every frame
     //rotateZ(frameCount * 0.01);
     rotateX(-QUARTER_PI);
     rotateY(lastX / 300 + QUARTER_PI);
-    
     renderAxis(); //render colorful axis
-    
     renderGrid(); //render gray grid at y = 0
 }
 
