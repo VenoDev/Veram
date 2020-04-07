@@ -1,17 +1,22 @@
-let objects = [
-    "camera",
-    "baseplate"
-];
+//Core of Veram game engine
+//distributed under GNU GPLv3 license
 
+function preload() {
+    //for example textures, shaders and videos are preloaded inside this function
+}
+
+var grid;
+var saveResources = false;
+let objects = new DrawBox();
 let objectTypes = ["point light", "camera", "cube"];
-
 let lastX = 0;
 let grids = [];
+let zoom = 0;
 
 function Grid(gridX, gridZ) {
     this.x = -100;
     this.z = -100;
-    this.size = 20;
+    this.size = 100;
 
     this.show = function() {
         this.x = gridX;
@@ -31,9 +36,11 @@ function Grid(gridX, gridZ) {
 }
 
 function createGrid() {
-    for(y=0; y <= 7; y++) {
-        for(i=0; i <= 7; i++) {
-            grids.push(new Grid(i*20 - 80, y*20 - 80));
+    let amount = 5;
+    let size = 100;
+    for(y=0; y <= amount; y++) {
+        for(i=0; i <= amount; i++) {
+            grids.push(new Grid(i*size - (((amount*size) / 2) - size / 2) - size, y*size - (((amount*size) / 2) - size / 2) - size));
         }
     }
 }
@@ -43,8 +50,6 @@ function renderGrid() {
         grids[i].show();
     }
 }
-
-var grid;
 
 function renderAxis() {
     strokeWeight(1);
@@ -67,9 +72,40 @@ function renderAxis() {
 
 function setup() { //Called on the start of the program
     smooth();
-    createCanvas(windowWidth, windowHeight, WEBGL);
+    cnv = createCanvas(windowWidth, windowHeight, WEBGL);
+    cam = createCamera();
+    cnv.mouseWheel(changeSize); //listener for mouse wheel
     createGrid();
+    cam.move(0, 0, -420);
 }
+
+function DrawBox() {
+    this.x = 0;
+    this.y = 0;
+    this.z = 0;
+
+    this.xS = 0;
+    this.yS = 0;
+    this.zS = 0;
+
+    this.render = function(objX, objY, objZ, sizeX, sizeY, sizeZ, color, stroke) {
+        this.x = objX;
+        this.y = objY;
+        this.z = objZ;
+
+        this.xS = sizeX;
+        this.yS = sizeY;
+        this.zS = sizeZ;
+        //stroke('rgba(0,255,0,0.25)'); WHY THAT DOESN'T WORK
+        strokeWeight(stroke);
+        fill(color);
+        translate(this.x, -this.y, this.z);
+        box(this.xS, this.yS, this.zS);
+        translate(-this.x, this.y, -this.z);
+    }
+}
+
+//objects.push(new Grid());
 
 function draw() { //Called every frame
     background(21, 21, 21);
@@ -77,8 +113,17 @@ function draw() { //Called every frame
     //rotateZ(frameCount * 0.01);
     rotateX(-QUARTER_PI);
     rotateY(lastX / 300 + QUARTER_PI);
+    
     renderAxis(); //render colorful axis
-    renderGrid(); //render gray grid at y = 0
+    if(!saveResources) {
+        renderGrid(); //render gray grid at y = 0
+    }
+    objects.render(300, 150, -250, 50, 300, 50, "#255565", 0);
+    objects.render(300, 150, -50, 50, 300, 50, "#255565", 0);
+    objects.render(300, 150, -150, 50, 50, 150, "#255565", 0);
+    objects.render(300, 100, 150, 50, 200, 50, "#255565", 0);
+    objects.render(300, 275, 150, 50, 50, 50, "#255565", 0);
+    //renderObjects(); //render objects by their list
 }
 
 function mouseDragged() {
@@ -86,6 +131,14 @@ function mouseDragged() {
     return false;
 }
 
-function windowResized() {
-    resizeCanvas(windowWidth, windowHeight);
+function mouseWheel() {
+    cam.move(0, 0, zoom); //zooming
+}
+
+function changeSize(event) {
+    if (event.deltaY > 0) {
+        zoom = 30;
+    } else {
+        zoom = -30;
+    }
 }
